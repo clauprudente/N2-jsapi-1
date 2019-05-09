@@ -10,8 +10,9 @@ fetch('https://reqres.in/api/users')
             const p = document.createElement('p');
             const botao = document.createElement('button')
 
+            card.setAttribute('id', data.data[i].id)
             card.setAttribute('class', 'card');
-            botao.setAttribute('data-id', '1')
+            botao.setAttribute('data-id', data.data[i].id)
 
             h2.innerHTML = data.data[i].first_name + " " + data.data[i].last_name
             p.innerHTML = data.data[i].email;
@@ -22,6 +23,27 @@ fetch('https://reqres.in/api/users')
             card.appendChild(p)
             card.appendChild(botao)
 
+            botao.addEventListener('click', () => {
+                const thisCard = botao.parentElement;
+                const cardPai = thisCard.parentElement;
+                console.log('oi');
+                fetch('https://reqres.in/api/users', {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "id": botao.getAttribute("data-id")
+                    })
+                })
+                    .then(dado => {
+                        cardPai.removeChild(thisCard)
+                    })
+                    .catch(erro => {
+                        console.log(erro)
+                    })
+            })
 
         }
     })
